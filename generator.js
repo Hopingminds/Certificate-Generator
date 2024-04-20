@@ -117,7 +117,13 @@ const generatePDF = async (name, selectedCourse, selectedDate) => {
     const trimmed_selectedCourse = selectedCourse.trim();
   
     try {
-        const userFound = await Data.findOne({ name: name, email: email ,course:trimmed_selectedCourse });
+      const userFound = await Data.findOne({
+        $and: [
+          { email: { $regex: new RegExp("^" + email + "$", "i") } },
+          { name: { $regex: new RegExp("^" + name + "$", "i") } },
+          { course: trimmed_selectedCourse }
+        ]
+      });      
 
         if(userFound){
             const pdfBytes = await generatePDF(capitalized_name, trimmed_selectedCourse, selectedDate);
@@ -152,7 +158,7 @@ const generatePDF = async (name, selectedCourse, selectedDate) => {
   });
   
 
-mongoose.connect('mongodb+srv://harsh31:harsh31@cluster0.5wf9evc.mongodb.net/?retryWrites=true&w=majority').then(() => {
+mongoose.connect('mongodb+srv://anuraag:discovery1@cluster0.9thc6oj.mongodb.net/certify?retryWrites=true&w=majority&appName=Cluster0').then(() => {
     console.log("connected")
 }).catch((err) => {
     console.log("disconnected", err)
