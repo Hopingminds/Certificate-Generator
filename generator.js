@@ -136,7 +136,7 @@ const generatePDF = async (name, selectedCourse, selectedDate) => {
         
             // Set the response headers to trigger the download
             res.setHeader('Content-Type', 'application/pdf');
-            // res.setHeader('Content-Disposition', `attachment; filename=https://hopingminds.com/${capitalized_name}.pdf`);
+            res.setHeader('Content-Disposition', `attachment; filename=hopingminds_${capitalized_name}.pdf`);
         
             // Send the PDF Buffer as the response
             res.send(pdfBuffer);
