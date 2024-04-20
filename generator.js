@@ -24,10 +24,12 @@ const generatePDF = async (name, selectedCourse, selectedDate) => {
   
     //get custom font
     const fontBytes = await fs.readFile('./GoodVibrations Script.ttf');
+    const montFont = await fs.readFile('./Montserrat-Medium.ttf');
     const dateBytes = await fs.readFile('./Sanchez-Regular.ttf');
   
     // Embed our custom font in the document
     const customFont = await pdfDoc.embedFont(fontBytes);
+    const customMontFont = await pdfDoc.embedFont(montFont);
     const dateFont = await pdfDoc.embedFont(dateBytes);
     // Get the first page of the document
     const pages = pdfDoc.getPages();
@@ -52,9 +54,9 @@ const generatePDF = async (name, selectedCourse, selectedDate) => {
     });
   
     // Manually position the course and date below the name
-    const courseFontSize = 24;
+    const courseFontSize = 20;
     const dateFontSize = 16;
-    const courseTextWidth = customFont.widthOfTextAtSize(selectedCourse, courseFontSize);
+    const courseTextWidth = customMontFont.widthOfTextAtSize(selectedCourse, courseFontSize);
     const courseXPosition = (width - courseTextWidth) / 2;
     const courseYPosition = 218;
     const dateXPosition = 160; // Adjust the x position as needed
@@ -64,7 +66,7 @@ const generatePDF = async (name, selectedCourse, selectedDate) => {
       x: courseXPosition,
       y: courseYPosition,
       size: courseFontSize,
-      font: customFont,
+      font: customMontFont,
       color: rgb(0, 0, 0),
     });
   
