@@ -52,28 +52,29 @@ const generatePDF = async (name, selectedCourse, selectedDate) => {
     });
   
     // Manually position the course and date below the name
-    // const courseFontSize = 24;
-    // const dateFontSize = 16;
-    // const courseXPosition = 360; // Adjust the x position as needed
-    // const courseYPosition = 218;
-    // const dateXPosition = 160; // Adjust the x position as needed
-    // const dateYPosition = 130;
+    const courseFontSize = 24;
+    const dateFontSize = 16;
+    const courseTextWidth = customFont.widthOfTextAtSize(selectedCourse, courseFontSize);
+    const courseXPosition = (width - courseTextWidth) / 2;
+    const courseYPosition = 218;
+    const dateXPosition = 160; // Adjust the x position as needed
+    const dateYPosition = 142;
   
-    // firstPage.drawText(` "${selectedCourse}"`, {
-    //   x: courseXPosition,
-    //   y: courseYPosition,
-    //   size: courseFontSize,
-    //   font: customFont,
-    //   color: rgb(0, 0, 0),
-    // });
+    firstPage.drawText(`${selectedCourse}`, {
+      x: courseXPosition,
+      y: courseYPosition,
+      size: courseFontSize,
+      font: customFont,
+      color: rgb(0, 0, 0),
+    });
   
-    // firstPage.drawText(`${selectedDate}`, {
-    //   x: dateXPosition,
-    //   y: dateYPosition,
-    //   size: dateFontSize,
-    //   font: dateFont,
-    //   color: rgb(0, 0, 0),
-    // });
+    firstPage.drawText(`${selectedDate}`, {
+      x: dateXPosition,
+      y: dateYPosition,
+      size: dateFontSize,
+      font: dateFont,
+      color: rgb(0, 0, 0),
+    });
   
     // Serialize the PDFDocument to bytes (a Uint8Array)
     const pdfBytes = await pdfDoc.save();
@@ -133,7 +134,7 @@ const generatePDF = async (name, selectedCourse, selectedDate) => {
         
             // Set the response headers to trigger the download
             res.setHeader('Content-Type', 'application/pdf');
-            res.setHeader('Content-Disposition', `attachment; filename=https://hopingminds.com/${capitalized_name}.pdf`);
+            // res.setHeader('Content-Disposition', `attachment; filename=https://hopingminds.com/${capitalized_name}.pdf`);
         
             // Send the PDF Buffer as the response
             res.send(pdfBuffer);
