@@ -60,7 +60,7 @@ const generatePDF = async (name, selectedCourse, selectedDate) => {
     const courseXPosition = (width - courseTextWidth) / 2;
     const courseYPosition = 218;
     const dateXPosition = 160; // Adjust the x position as needed
-    const dateYPosition = 142;
+    const dateYPosition = 145;
   
     firstPage.drawText(`${selectedCourse}`, {
       x: courseXPosition,
