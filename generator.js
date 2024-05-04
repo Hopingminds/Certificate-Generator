@@ -10,11 +10,22 @@ const fontkit = require('@pdf-lib/fontkit');
 const { Readable } = require('stream');
 
 
-const generatePDF = async (name, selectedCourse, selectedDate) => {
-    const existingPdfBytes = await fs.readFile('./cert.pdf');
-  
+const generatePDF = async (name, selectedCourse, selectedDate, selectedCertficateTemplate) => {
+    const certificate1 = await fs.readFile('./cert.pdf');
+    const certificate2 = await fs.readFile('./cert2.pdf');
+    const pdfDoc = await PDFDocument.load(certificate1);
     // Load a PDFDocument from the existing PDF bytes
-    const pdfDoc = await PDFDocument.load(existingPdfBytes);
+
+    switch (selectedCertficateTemplate) {
+      case 1:
+        pdfDoc = await PDFDocument.load(certificate1);
+        break;
+      case 2:
+        pdfDoc = await PDFDocument.load(certificate2);
+        break
+      default:
+        break;
+    }
   
     // Register the standard fonts with the PDFDocument
     pdfDoc.registerFontkit(fontkit);
@@ -103,7 +114,7 @@ const generatePDF = async (name, selectedCourse, selectedDate) => {
 
 
   app.post('/auth', async (req, res) => {
-    const { name, email, selectedCourse, selectedDate } = req.body;
+    const { name, email, selectedCourse, selectedDate, selectedCertficateTemplate } = req.body;
   
     console.log(name, email, selectedCourse, selectedDate);
     if (!name || !email || !selectedCourse || !selectedDate) {
@@ -129,7 +140,7 @@ const generatePDF = async (name, selectedCourse, selectedDate) => {
       });      
 
         if(userFound){
-            const pdfBytes = await generatePDF(capitalized_name, trimmed_selectedCourse, selectedDate);
+            const pdfBytes = await generatePDF(capitalized_name, trimmed_selectedCourse, selectedDate, selectedCertficateTemplate);
   
             // Convert Uint8Array to Buffer
             const pdfBuffer = Buffer.from(pdfBytes);
