@@ -140,7 +140,7 @@ const generatePDF = async (name, selectedCourse, selectedDate, selectedCertficat
       });      
 
         if(userFound){
-            const pdfBytes = await generatePDF(capitalized_name, trimmed_selectedCourse, selectedDate, selectedCertficateTemplate);
+            const pdfBytes = await generatePDF(capitalized_name, trimmed_selectedCourse, selectedDate, Number(selectedCertficateTemplate));
   
             // Convert Uint8Array to Buffer
             const pdfBuffer = Buffer.from(pdfBytes);
