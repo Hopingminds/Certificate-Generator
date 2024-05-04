@@ -13,7 +13,7 @@ const { Readable } = require('stream');
 const generatePDF = async (name, selectedCourse, selectedDate, selectedCertficateTemplate) => {
     const certificate1 = await fs.readFile('./cert.pdf');
     const certificate2 = await fs.readFile('./cert2.pdf');
-    const pdfDoc = await PDFDocument.load(certificate1);
+    let pdfDoc = await PDFDocument.load(certificate1);
     // Load a PDFDocument from the existing PDF bytes
 
     switch (selectedCertficateTemplate) {
