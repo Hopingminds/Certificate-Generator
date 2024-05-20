@@ -13,6 +13,7 @@ const { Readable } = require('stream');
 const generatePDF = async (name, selectedCourse, selectedDate, selectedCertficateTemplate) => {
     const certificate1 = await fs.readFile('./cert.pdf');
     const certificate2 = await fs.readFile('./cert2.pdf');
+    const certificate3 = await fs.readFile('./cert3.pdf');
     let pdfDoc = await PDFDocument.load(certificate1);
     // Load a PDFDocument from the existing PDF bytes
 
@@ -22,6 +23,9 @@ const generatePDF = async (name, selectedCourse, selectedDate, selectedCertficat
         break;
       case 2:
         pdfDoc = await PDFDocument.load(certificate2);
+        break
+      case 3:
+        pdfDoc = await PDFDocument.load(certificate3);
         break
       default:
         break;
