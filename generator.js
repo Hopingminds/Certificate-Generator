@@ -14,6 +14,8 @@ const generatePDF = async (name, selectedCourse, selectedDate, selectedCertficat
     const certificate1 = await fs.readFile('./cert.pdf');
     const certificate2 = await fs.readFile('./cert2.pdf');
     const certificate3 = await fs.readFile('./cert3.pdf');
+    const certificate4 = await fs.readFile('./cert4.pdf');
+    const certificate5 = await fs.readFile('./cert5.pdf');
     let pdfDoc = await PDFDocument.load(certificate1);
     // Load a PDFDocument from the existing PDF bytes
 
@@ -26,6 +28,12 @@ const generatePDF = async (name, selectedCourse, selectedDate, selectedCertficat
         break
       case 3:
         pdfDoc = await PDFDocument.load(certificate3);
+        break
+    case 4:
+        pdfDoc = await PDFDocument.load(certificate4);
+        break
+    case 5:
+        pdfDoc = await PDFDocument.load(certificate5);
         break
       default:
         break;
