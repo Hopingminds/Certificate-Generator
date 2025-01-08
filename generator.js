@@ -20,37 +20,28 @@ const getFirstPageAsImage = async (pdfBuffer) => {
   const tempPdfPath = path.join(outputDir, 'temp.pdf');
   const outputImagePath = path.join(outputDir, 'certificate_page-1.png');
 
-  try {
-    // Ensure output directory exists
-    await fs.mkdir(outputDir, { recursive: true });
+  // Ensure output directory exists
+  await fs.mkdir(outputDir, { recursive: true });
 
-    // Write the buffer to a temporary file
-    await fs.writeFile(tempPdfPath, pdfBuffer);
+  // Write the buffer to a temporary file
+  await fs.writeFile(tempPdfPath, pdfBuffer);
 
-    // Convert the first page of the PDF to an image
-    console.log("Starting Poppler conversion...");
-    const result = await poppler.convert(tempPdfPath, {
-      format: 'png',
-      out_dir: outputDir,
-      out_prefix: 'certificate_page',
-      page: 1,
-    });
+  // Convert the first page of the PDF to an image
+  const result = await poppler.convert(tempPdfPath, {
+    format: 'png',
+    out_dir: outputDir,
+    out_prefix: 'certificate_page',
+    page: 1, // Process only the first page
+  });
 
-    console.log("Poppler conversion result:", result);
+  // Read the generated image as a buffer
+  const imageBuffer = await fs.readFile(outputImagePath);
 
-    // Read the generated image as a buffer
-    const imageBuffer = await fs.readFile(outputImagePath);
+  // Clean up temporary files
+  await fs.unlink(tempPdfPath);
+  await fs.unlink(outputImagePath);
 
-    // Clean up temporary files
-    await fs.unlink(tempPdfPath);
-    await fs.unlink(outputImagePath);
-    console.log("Poppler conversion successful!");
-
-    return imageBuffer; // Return the buffer for further use
-  } catch (err) {
-    console.error("Error during Poppler conversion:", err.message);
-    throw err;
-  }
+  return imageBuffer; // Return the buffer for further use
 };
 
 // Helper function to create a hash (SHA-256)
@@ -195,18 +186,18 @@ const generatePDF = async (name, selectedCourse, selectedDate, selectedCertficat
   // Draw the text in the center
   firstPage.drawText(name, {
     x: xPosition,
-    y: yPosition + 25,
+    y: yPosition + 77,
     size: fontSize,
     font: gvFont,
-    color: rgb(0, 0, 0),
+    color: rgb(0.7450980392156863, 0.5607843137254902, 0.20392156862745098),
   });
 
   // Manually position the course and date below the name
-  const courseFontSize = 12;
+  const courseFontSize = 20;
   const dateFontSize = 16;
-  const courseTextWidth = colusFont.widthOfTextAtSize(selectedCourse, courseFontSize);
+  const courseTextWidth = customMontFont.widthOfTextAtSize(selectedCourse, courseFontSize);
   const courseXPosition = (width - courseTextWidth) / 2;
-  const courseYPosition = 188;
+  const courseYPosition = 205;
   const dateXPosition = 160; // Adjust the x position as needed
   const dateYPosition = 145;
 
@@ -214,8 +205,8 @@ const generatePDF = async (name, selectedCourse, selectedDate, selectedCertficat
     x: courseXPosition,
     y: courseYPosition,
     size: courseFontSize,
-    font: colusFont,
-    color: rgb(0, 0, 0),
+    font: customMontFont,
+    color: rgb(0.11372549019607843, 0.11372549019607843, 0.10588235294117647),
   });
 
   // firstPage.drawText(`${selectedDate}`, {
@@ -247,10 +238,10 @@ const generatePDF = async (name, selectedCourse, selectedDate, selectedCertficat
   const qrCroppedHeight = qrOriginalHeight - cropPadding * 2;
 
   // Define the QR code dimensions and position
-  const qrDrawWidth = 75; // Adjust as needed
-  const qrDrawHeight = 75; // Adjust as needed
-  const qrX = width - qrDrawWidth - 115; // Adjust x position
-  const qrY = 119; // Adjust y position
+  const qrDrawWidth = 100; // Adjust as needed
+  const qrDrawHeight = 100; // Adjust as needed
+  const qrX = width - qrDrawWidth - 60; // Adjust x position
+  const qrY = 53; // Adjust y position
 
   // Draw the QR code on the page
   firstPage.drawImage(qrImage, {
