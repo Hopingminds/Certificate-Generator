@@ -31,8 +31,11 @@ const getFirstPageAsImage = async (pdfBuffer) => {
     format: 'png',
     out_dir: outputDir,
     out_prefix: 'certificate_page',
-    page: 1, // Process only the first page
-  });
+    page: 1,
+  }).catch(err => {
+    console.error("Poppler conversion error:", err);
+    throw err;
+  });  
 
   // Read the generated image as a buffer
   const imageBuffer = await fs.readFile(outputImagePath);
