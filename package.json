@@ -22,8 +22,10 @@
     "mongoose": "^7.4.2",
     "node-modules": "^1.0.1",
     "nodemon": "^3.0.1",
+    "pdf-image": "^2.0.0",
     "pdf-lib": "^1.17.1",
     "pdf-poppler": "^0.2.1",
+    "pdf2pic": "^3.1.3",
     "qrcode": "^1.5.4",
     "stream": "^0.0.2"
   }
