@@ -12,8 +12,8 @@ const QRCode = require('qrcode');
 const crypto = require('crypto');
 const axios = require('axios');
 const FormData = require('form-data');
+const poppler = require('pdf-poppler');
 const path = require('path');
-const sharp = require('sharp');
 
 const getFirstPageAsImage = async (pdfBuffer) => {
   const outputDir = path.join(__dirname, 'output_images');
@@ -26,31 +26,13 @@ const getFirstPageAsImage = async (pdfBuffer) => {
   // Write the buffer to a temporary file
   await fs.writeFile(tempPdfPath, pdfBuffer);
 
-  // Load the PDF using pdf-lib
-  const pdfDoc = await PDFDocument.load(pdfBuffer);
-
-  // Extract the first page
-  const page = pdfDoc.getPages()[0];
-  const { width, height } = page.getSize();
-
-  console.log("width, height", width, height);
-  
-  // Render the first page to an image (using sharp)
-  const image = await sharp({
-    create: {
-      width: width * 2, // Scale up for better resolution
-      height: height * 2,
-      channels: 4, // RGBA
-      background: { r: 255, g: 255, b: 255, alpha: 1 },
-    },
-  })
-    .raw()
-    .toBuffer();
-
-  // Write the image to the output path
-  await sharp(image)
-    .toFormat('png')
-    .toFile(outputImagePath);
+  // Convert the first page of the PDF to an image
+  const result = await poppler.convert(tempPdfPath, {
+    format: 'png',
+    out_dir: outputDir,
+    out_prefix: 'certificate_page',
+    page: 1, // Process only the first page
+  });
 
   // Read the generated image as a buffer
   const imageBuffer = await fs.readFile(outputImagePath);
@@ -61,6 +43,7 @@ const getFirstPageAsImage = async (pdfBuffer) => {
 
   return imageBuffer; // Return the buffer for further use
 };
+
 // Helper function to create a hash (SHA-256)
 function cryptoHash(input) {
   return crypto.createHash('sha256').update(input).digest('hex');
