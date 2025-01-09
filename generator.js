@@ -17,7 +17,7 @@ const { fromPath } = require('pdf2pic');
 
 const getFirstPageAsImage = async (pdfBuffer) => {
   const outputDir = path.join(__dirname, 'output_images');
-  const outputImagePath = path.join(outputDir, 'certificate_page-1.png');
+  const outputImagePath = path.join(outputDir, 'certificate_page.1.png');
 
   // Ensure output directory exists
   await fs.mkdir(outputDir, { recursive: true });
@@ -29,11 +29,9 @@ const getFirstPageAsImage = async (pdfBuffer) => {
   // Set up the conversion options
   const options = {
     density: 100, // Resolution of the image
-    saveFilename: 'certificate_page-1',
+    saveFilename: 'certificate_page',
     savePath: outputDir,
     format: 'png',
-    width: 1200, // Desired width of the output image
-    height: 1600, // Optional: specify a height to scale the image
   };
 
   // Convert the first page
