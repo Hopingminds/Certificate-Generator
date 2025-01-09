@@ -14,25 +14,34 @@ const axios = require('axios');
 const FormData = require('form-data');
 const poppler = require('pdf-poppler');
 const path = require('path');
+const { fromPath } = require('pdf2pic');
 
 const getFirstPageAsImage = async (pdfBuffer) => {
   const outputDir = path.join(__dirname, 'output_images');
-  const tempPdfPath = path.join(outputDir, 'temp.pdf');
   const outputImagePath = path.join(outputDir, 'certificate_page-1.png');
 
   // Ensure output directory exists
   await fs.mkdir(outputDir, { recursive: true });
 
-  // Write the buffer to a temporary file
+  // Save the PDF buffer to a temporary file
+  const tempPdfPath = path.join(outputDir, 'temp.pdf');
   await fs.writeFile(tempPdfPath, pdfBuffer);
 
-  // Convert the first page of the PDF to an image
-  const result = await poppler.convert(tempPdfPath, {
+  // Set up the conversion options
+  const options = {
+    density: 100, // Resolution of the image
+    saveFilename: 'certificate_page-1',
+    savePath: outputDir,
     format: 'png',
-    out_dir: outputDir,
-    out_prefix: 'certificate_page',
-    page: 1, // Process only the first page
-  });
+    width: 1200, // Desired width of the output image
+    height: 1600, // Optional: specify a height to scale the image
+  };
+
+  // Convert the first page
+  const storeAsImage = fromPath(tempPdfPath, options);
+
+  // Convert and save the first page as a PNG image
+  await storeAsImage(1); // Convert the first page
 
   // Read the generated image as a buffer
   const imageBuffer = await fs.readFile(outputImagePath);
@@ -41,7 +50,7 @@ const getFirstPageAsImage = async (pdfBuffer) => {
   await fs.unlink(tempPdfPath);
   await fs.unlink(outputImagePath);
 
-  return imageBuffer; // Return the buffer for further use
+  return imageBuffer; // Return the image buffer
 };
 
 // Helper function to create a hash (SHA-256)
