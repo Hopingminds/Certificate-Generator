@@ -12,7 +12,6 @@ const QRCode = require('qrcode');
 const crypto = require('crypto');
 const axios = require('axios');
 const FormData = require('form-data');
-const poppler = require('pdf-poppler');
 const path = require('path');
 const { fromPath } = require('pdf2pic');
 
